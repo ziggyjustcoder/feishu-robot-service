@@ -1,0 +1,29 @@
+src/main/java/com/glass/feishurobot/tools/TripMcpService.java
+  30f091b03d4b53d6 12-13,22-25,38,52,63-64,74-75,86-87
+src/main/java/com/glass/feishurobot/common/llm/FuyaoService.java
+  30f091b03d4b53d6 5,7-8,10,12,14-23,36-42,44-48
+src/main/java/com/glass/feishurobot/service/assistant/TripAssistant.java
+  30f091b03d4b53d6 6-11,16,18-19,23
+src/main/java/com/glass/feishurobot/service/assistant/TripAi.java
+  30f091b03d4b53d6 1-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.24",
+  "base_commit_sha": "1d62670d1b4d2532d229de9cf9225b2353e49793",
+  "prompts": {
+    "30f091b03d4b53d6": {
+      "agent_id": {
+        "tool": "qoder",
+        "id": "f2400c99-d2f3-4c63-ada3-29325fb2d063",
+        "model": "qoder-model"
+      },
+      "human_author": "zhangkb2",
+      "messages": [],
+      "total_additions": 117,
+      "total_deletions": 121,
+      "accepted_lines": 72,
+      "overriden_lines": 0
+    }
+  }
+}
