@@ -1,7 +1,7 @@
 package com.glass.feishurobot.service.lark;
 
-import com.glass.feishurobot.common.llm.task.TempTaskProcessor;
-import com.glass.feishurobot.common.tools.AsyncExecutorUtil;
+import com.glass.feishurobot.common.utils.AsyncExecutorUtil;
+import com.glass.feishurobot.service.assistant.TripAssistant;
 import com.lark.oapi.service.im.ImService;
 import com.lark.oapi.service.im.v1.model.P2MessageReceiveV1;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,17 +14,17 @@ import java.util.concurrent.Semaphore;
 @Component
 public class CustomReceiveHandler extends ImService.P2MessageReceiveV1Handler {
     @Value("${task.concurren.limit}")
-    private Integer taskConcurrentLimit;
+    private Integer taskConcurrentLimit = 3;
     private static final Deque<P2MessageReceiveV1> workDeque = new ConcurrentLinkedDeque<>();
     // 2. 信号量：控制最大并发数为 3
     private final Semaphore semaphore;
-    private final TempTaskProcessor tempTaskProcessor;
+    private final TripAssistant tripAssistant;
     private final MsgReplyUtil msgReplyUtil;
 
-    public CustomReceiveHandler(TempTaskProcessor tempTaskProcessor, MsgReplyUtil msgReplyUtil) {
+    public CustomReceiveHandler(TripAssistant tripAssistant, MsgReplyUtil msgReplyUtil) {
         // 启动后台调度线程（使用虚拟线程）
         Thread.startVirtualThread(this::scheduleLoop);
-        this.tempTaskProcessor = tempTaskProcessor;
+        this.tripAssistant = tripAssistant;
         this.msgReplyUtil = msgReplyUtil;
         semaphore = new Semaphore(taskConcurrentLimit);
     }
@@ -44,7 +44,7 @@ public class CustomReceiveHandler extends ImService.P2MessageReceiveV1Handler {
                 AsyncExecutorUtil.getInstance().executeAsync(() -> {
                     // 异步执行任务
                     if (msg != null) {
-                        String handle = tempTaskProcessor.handle(msg.getEvent().getMessage().getContent());
+                        String handle = tripAssistant.handle(msg.getEvent().getMessage().getContent());
                         try {
                             msgReplyUtil.replyMsg(msg.getEvent().getMessage().getMessageId(), handle);
                         } catch (Exception e) {

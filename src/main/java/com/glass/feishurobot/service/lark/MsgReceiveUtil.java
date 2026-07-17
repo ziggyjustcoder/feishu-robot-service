@@ -18,7 +18,7 @@ public class MsgReceiveUtil {
     }
 
     @Bean
-    public Client LarkReciveClient() {
+    public Client larkReciveClient() {
         EventDispatcher eventHandler = EventDispatcher.newBuilder("", "")
                 .onP2MessageReceiveV1(customReceiveHandler)
                 .build();
